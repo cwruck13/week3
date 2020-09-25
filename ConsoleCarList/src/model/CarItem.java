@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="cars")
+@Table(name="cars") //in your video, the table name was 'items' not cars so this is why it's not working
 public class CarItem {
 	
 	// attributes
