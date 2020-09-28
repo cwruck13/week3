@@ -9,47 +9,49 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="cars")
+@Table(name="items")
 public class CarItem {
 	
 	// attributes
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	
+	@Column(name="ID")
+	private int id;
 	@Column(name="MAKE")
 	private String make;
-	@Column(name="MODEL")
-	private String model;
 	@Column(name="YEAR")
 	private String year;
+	@Column(name="MODEL")
+	private String model;
 	
 	//default no arg
 	public CarItem(){
 		super();
 	}
 	
-	//2 args
-	public CarItem(String year, String model) {
+	//3 args
+	public CarItem(String make, String year, String model) {
 		super();
+		this.make = make;
 		this.year = year;
 		this.model = model;
 	}
 
 	//getters and setters
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getMake() {
 		return make;
 	}
 
 	public void setMake(String make) {
 		this.make = make;
-	}
-
-	public String getModel() {
-		return model;
-	}
-
-	public void setModel(String model) {
-		this.model = model;
 	}
 
 	public String getYear() {
@@ -60,9 +62,17 @@ public class CarItem {
 		this.year = year;
 	}
 	
+	public String getModel() {
+		return model;
+	}
+
+	public void setModel(String model) {
+		this.model = model;
+	}
+
 	//print method
 	public String returnItemDetails() {
-		return year + ":	" + model;
+		return make + " "  + year + " " + model;
 	}
 
 }

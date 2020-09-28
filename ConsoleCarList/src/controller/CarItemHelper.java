@@ -27,7 +27,7 @@ public class CarItemHelper {
 	//showing all entries
 	public List<CarItem> showAllItems() {
 		EntityManager em = emfactory.createEntityManager();
-		List<CarItem> allItems = em.createQuery("SELECT i FROM	ListItem i").getResultList();
+		List<CarItem> allItems = em.createQuery("SELECT i FROM CarItem i").getResultList();
 		return allItems;
 	}
 	
@@ -37,12 +37,13 @@ public class CarItemHelper {
 		em.getTransaction().begin();
 
 		TypedQuery<CarItem> typedQuery = em.createQuery(
-				"select li	from ListItem li where li.store	= :selectedStore and li.item = :selectedItem",
+				"select ca from CarItem ca where ca.make = :selectedMake and ca.year = :selectedYear and ca.model = :selectedModel",
 				CarItem.class);
 
 		// Substitute parameter with actual data from the toDelete item
-		typedQuery.setParameter("selectedStore", toDelete.getYear());
-		typedQuery.setParameter("selectedItem", toDelete.getModel());
+		typedQuery.setParameter("selectedMake", toDelete.getMake());
+		typedQuery.setParameter("selectedYear", toDelete.getYear());
+		typedQuery.setParameter("selectedModel", toDelete.getModel());
 
 		// we only want one result
 		typedQuery.setMaxResults(1);
@@ -56,14 +57,27 @@ public class CarItemHelper {
 		em.close();
 	}
 	
+	
+	//search for make
+	public List<CarItem> searchForItemByMake(String makeName) {
+		// TODO Auto-generated method stub
+		EntityManager em = emfactory.createEntityManager();
+		em.getTransaction().begin();
+		TypedQuery<CarItem> typedQuery = em.createQuery("select	ca from CarItem	ca	where ca.make	=	:selectedMake", CarItem.class);
+		typedQuery.setParameter("selectedMake", makeName);
+		List<CarItem> foundItems = typedQuery.getResultList();
+		em.close();
+		return foundItems;
+	}
+	
 	//search for years
 	public List<CarItem> searchForItemByYear(String year) {
 		// TODO Auto-generated method stub
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
 		TypedQuery<CarItem> typedQuery = em
-				.createQuery("select	li from ListItem li	where li.store = :selectedStore", CarItem.class);
-		typedQuery.setParameter("selectedStore", year);
+				.createQuery("select ca from CarItem ca	where ca.year = :selectedYear", CarItem.class);
+		typedQuery.setParameter("selectedYear", year);
 		List<CarItem> foundItems = typedQuery.getResultList();
 		em.close();
 		return foundItems;
@@ -74,19 +88,20 @@ public class CarItemHelper {
 		// TODO Auto-generated method stub
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		TypedQuery<CarItem> typedQuery = em.createQuery("select	li	from ListItem	li	where	li.item	=	:selectedItem", CarItem.class);
-		typedQuery.setParameter("selectedItem", modelName);
+		TypedQuery<CarItem> typedQuery = em.createQuery("select	ca from CarItem	ca	where ca.model =	:selectedModel", CarItem.class);
+		typedQuery.setParameter("selectedModel", modelName);
 		List<CarItem> foundItems = typedQuery.getResultList();
 		em.close();
 		return foundItems;
 	}
 	
+	
 	//editing make
-	public CarItem searchForItemByMake(String makeToEdit) {
+	public CarItem searchForItemById(int IdToEdit) {
 		//TODO	Auto-generated	method	stub
 		EntityManager em = emfactory.createEntityManager();
 		em.getTransaction().begin();
-		CarItem found = em.find(CarItem.class, makeToEdit);
+		CarItem found = em.find(CarItem.class, IdToEdit);
 		em.close();
 		return found;
 	}

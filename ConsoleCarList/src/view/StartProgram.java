@@ -1,5 +1,4 @@
 package view;
-//Cassandra Wruck
 
 import java.util.List;
 import java.util.Scanner;
@@ -9,80 +8,105 @@ import model.CarItem;
 
 public class StartProgram {
 
-	//scanner
+	// scanner
 	static Scanner in = new Scanner(System.in);
 	static CarItemHelper cih = new CarItemHelper();
-	
-	//adding an item
+
+	// adding an item
 	private static void addAnItem() {
 		// TODO Auto-generated method stub
+		System.out.print("Enter make: ");
+		String make = in.nextLine();
 		System.out.print("Enter a year: ");
 		String year = in.nextLine();
 		System.out.print("Enter a model: ");
 		String model = in.nextLine();
-		CarItem toAdd = new CarItem(year, model);
+		CarItem toAdd = new CarItem(make, year, model);
 		cih.insertItem(toAdd);
 	}
-	
+
 	private static void deleteAnItem() {
 		// TODO Auto-generated method stub
+		System.out.print("Enter in make to delete: ");
+		String make = in.nextLine();
 		System.out.print("Enter the year to delete: ");
 		String year = in.nextLine();
 		System.out.print("Enter the model to delete: ");
 		String model = in.nextLine();
 
-		CarItem	toDelete = new CarItem(year, model);
+		CarItem toDelete = new CarItem(make, year, model);
 		cih.deleteItem(toDelete);
-		
+
 	}
-	
-	//editing an item
+
+	// editing an item
 	private static void editAnItem() {
 		// TODO Auto-generated method stub
 		System.out.println("How would you like to search? ");
-		System.out.println("1 : Search by Year");
-		System.out.println("2 : Search by Model");
+		System.out.println("1 : Search by Make");
+		System.out.println("2 : Search by Year");
+		System.out.println("3 : Search by Model");
 		int searchBy = in.nextInt();
 		in.nextLine();
-		
-		 List<CarItem> foundItems; if (searchBy == 1) {
-		 System.out.print("Enter the year: "); String year = in.nextLine();
-		 foundItems	= cih.searchForItemByYear(year);
-		 
-		 } else { 
-		 System.out.print("Enter the model: "); String modelName = in.nextLine();
-		 foundItems	= cih.searchForItemByModel(modelName);
-		 
-		 
-		 }
-		  
-		 if (!foundItems.isEmpty()) { System.out.println("Found Results."); for
-		 (CarItem l : foundItems) { System.out.println(l.getMake() + " : " +
-		 l.toString()); } System.out.print("Which make to edit: "); String makeToEdit = in.nextLine();
-		 
-		 CarItem toEdit = cih.searchForItemByMake(makeToEdit);
-		 System.out.println("Retrieved " + toEdit.getMake() + " from " +
-		 toEdit.getYear()); System.out.println("1 : Update Year");
-		 System.out.println("2 : Update Model"); int update = in.nextInt();
-		 in.nextLine();
-		 
-		 if (update == 1) { System.out.print("New year: "); String newYear =
-		 in.nextLine(); toEdit.setYear(newYear); } else if (update == 2) {
-		 System.out.print("New Model: "); String newModel = in.nextLine();
-		 toEdit.setModel(newModel); }
-		 
-		 cih.updateModel(toEdit);
-		  
-		 } else { System.out.println("---- No results found"); }
-		 
+
+		List<CarItem> foundItems;
+		if (searchBy == 1) {
+			System.out.print("Enter the make: ");
+			String make = in.nextLine();
+			foundItems = cih.searchForItemByMake(make);
+		} else if (searchBy == 2) {
+			System.out.print("Enter the year: ");
+			String year = in.nextLine();
+			foundItems = cih.searchForItemByYear(year);
+		} else {
+			System.out.print("Enter the model: ");
+			String modelName = in.nextLine();
+			foundItems = cih.searchForItemByModel(modelName);
+		}
+
+		if (!foundItems.isEmpty()) {
+			System.out.println("Found Results.");
+			for (CarItem c : foundItems) {
+				System.out.println(c.getId() + " : " + c.toString());
+			}
+			System.out.print("Which make to edit: ");
+			int idToEdit = in.nextInt();
+
+			CarItem toEdit = cih.searchForItemById(idToEdit);
+			System.out.println("Retrieved " + toEdit.getId() + " from " + toEdit.getMake());
+			System.out.println("1: Update Make");
+			System.out.println("2 : Update Year");
+			System.out.println("3 : Update Model");
+			int update = in.nextInt();
+			in.nextLine();
+
+			if (update == 1) {
+				System.out.print("New make: ");
+				String newMake = in.nextLine();
+				toEdit.setMake(newMake);
+			} else if (update == 2){
+				System.out.print("New year: ");
+				String newYear = in.nextLine();
+				toEdit.setYear(newYear);
+			} else if (update == 3) {
+				System.out.print("New Model: ");
+				String newModel = in.nextLine();
+				toEdit.setModel(newModel);
+			}
+
+			cih.updateModel(toEdit);
+
+		} else {
+			System.out.println("---- No results found");
+		}
+
 	}
-	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		runMenu();
-
 	}
-	
+
 	public static void runMenu() {
 		boolean goAgain = true;
 		System.out.println("--- Welcome to the list of cars!! ---");
@@ -117,13 +141,11 @@ public class StartProgram {
 
 	private static void viewTheList() {
 		// TODO Auto-generated method stub
-		List <CarItem> allItems = cih.showAllItems();
+		List<CarItem> allItems = cih.showAllItems();
 		for (CarItem singleItem : allItems) {
 			System.out.println(singleItem.returnItemDetails());
 		}
 
-		
 	}
-
 
 }
